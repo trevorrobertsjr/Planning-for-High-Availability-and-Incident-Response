@@ -39,7 +39,7 @@ module "vpc_west" {
   cidr_block    = "10.100.0.0/16"
   account_owner = local.name
   name          = "${local.name}-project"
-  azs           = ["us-west-2b", "us-west-2c"]
+  azs           = ["us-west-2a","us-west-2b", "us-west-2c"]
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = 1
   }
