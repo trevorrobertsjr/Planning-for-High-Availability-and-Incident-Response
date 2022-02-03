@@ -1,8 +1,10 @@
 variable "primary_db_cluster_arn" {}
+variable "primary_db_instance_arn" {}
 
 resource "aws_rds_cluster_parameter_group" "cluster_pg-s" {
-  name   = "udacity-pg-s"
-  family = "aurora5.6"
+  name       = "udacity-pg-s"
+  family     = "aurora5.6"
+  depends_on = [var.primary_db_instance_arn]
 
   parameter {
     name         = "binlog_format"
@@ -32,11 +34,13 @@ resource "aws_rds_cluster" "udacity_cluster-s" {
   engine_version                  = "5.6.mysql_aurora.1.19.1"
   skip_final_snapshot             = true
   storage_encrypted               = false
+  replication_source_identifier   = var.primary_db_cluster_arn
   depends_on                      = [aws_rds_cluster_parameter_group.cluster_pg-s]
 }
 
 resource "aws_rds_cluster_instance" "udacity_instance-s" {
-  count                = var.db_count
+  # count                = var.db_count
+  count                = 2
   identifier           = "udacity-db-instance-${count.index}-s"
   cluster_identifier   = aws_rds_cluster.udacity_cluster-s.id
   instance_class       = "db.t2.small"
