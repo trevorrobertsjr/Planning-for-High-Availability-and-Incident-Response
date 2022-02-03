@@ -29,19 +29,29 @@ More detailed descriptions of each asset identified above.
 ### Pre-Steps:
 List steps you would perform to setup the infrastructure in the other region. It doesn't have to be super detailed, but high-level should suffice.
 
+#### Infrastructure
+
+1. Create Route 53 records for the primary and standby application instances and configure DNS failover policies to automatically handle an outage in the primary region
+
 #### Utilities: Prometheus and Grafana
 
-In the zone2 Terraform deployment, deploy the EKS cluster. Once the EKS cluster up is running, deploy Prometheus and Grafana.
+1. In the zone2 Terraform deployment, deploy the EKS cluster. Once the EKS cluster up is running, deploy Prometheus and Grafana.
+
+2. Access the DR Grafana instance and verify DR deployment application metrics are displayed as expected with a sample user input.
 
 #### Application
-In the zone2 Terraform deployment, deploy the ALB and EC2 instances.
+1. In the zone2 Terraform deployment, deploy the ALB and EC2 instances.
+
+2. Verify the DR application instance works as expected.
 
 #### Database
-In the zone1 Terraform deployment, deploy the primary RDS cluster of two nodes (1 Writer and 1 Reader) followed by the deployment of the secondary RDS cluster, which is configured to be the standby for the primary cluster ARN. 
+1. In the zone1 Terraform deployment, configure the automation as follows.
+    1. Output the primary RDS cluster and writer instance ARNs for the standby RDS cluster deployment automation to use as an input.
+    2. In the standby automation, specify the primary cluster arn as the replication_source_identifier and configure the primary instance arn as a dependency. 
 
 ## Steps:
 You won't actually perform these steps, but write out what you would do to "fail-over" your application and database cluster to the other region. Think about all the pieces that were setup and how you would use those in the other region
 
-1. Confirm that Route 53 failover routing for the application endpoint completed successfully, and the application is now accessible from the standby region instances
+1. Confirm that Route 53 failover routing for the application endpoint completed successfully, and the application is now accessible from the standby region instances.
 2. Confirm the RDS cluster failed over.
 3. Confirm the failed over application instance is able to read/write from/to the failed over RDS cluster.

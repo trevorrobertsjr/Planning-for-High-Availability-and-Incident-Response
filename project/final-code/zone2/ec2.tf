@@ -16,7 +16,4 @@ module "project_ec2" {
   private_subnet_ids = data.terraform_remote_state.vpc.outputs.private_subnet_ids
   public_subnet_ids  = data.terraform_remote_state.vpc.outputs.public_subnet_ids
   vpc_id             = data.terraform_remote_state.vpc.outputs.vpc_id
-  # private_subnet_ids = ["subnet-07787680d865ad85b", "subnet-039dc13df4b5e683a"]
-  # public_subnet_ids  = ["subnet-092ed720561b467d9", "subnet-0f50a3af5e185a112"]
-  # vpc_id             = "vpc-0f94baecba103d0ef"
 }
